@@ -2,6 +2,8 @@
 
 #import cv2
 from torch.utils.data import Dataset
+from torchvision.transforms import Compose, RandomCrop, ToTensor, ToPILImage, CenterCrop, Resize
+
 import torch
 from os import listdir
 from os.path import join
@@ -19,6 +21,13 @@ def load_image(path):
     img = Image.open(path)
     return img
 
+def display_transform():
+    return Compose([
+        ToPILImage(),
+        Resize(224),
+        CenterCrop(224),
+        ToTensor()
+    ])
 
 class DatasetSuperRes(Dataset):
     def __init__(self, image_dir, target_dir, transform=None):        
