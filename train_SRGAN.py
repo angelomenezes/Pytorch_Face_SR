@@ -37,7 +37,7 @@ def main():
     # SRGAN parameters
 
     batch_size = 10
-    num_epochs = 100
+    epochs = 100
     lr = 0.01
     threads = 4
     upscale_factor = args.upscale_factor
@@ -75,7 +75,7 @@ def main():
 
     begin_counter = time.time()
 
-    for epoch in range(1, num_epochs + 1):
+    for epoch in range(1, epochs + 1):
         
         running_results = {'batch_sizes': 0, 'd_loss': 0, 'g_loss': 0, 
                            'd_score': 0, 'g_score': 0}
@@ -126,7 +126,7 @@ def main():
             running_results['g_score'] += fake_out.item() * batch_size
          
         print('[{}/{}] Loss_D: {:.4f} Loss_G: {:.4f} D(x): {:.4f} D(G(z)): {:.4f}'.format(
-            epoch, num_epochs, 
+            epoch, epochs, 
             running_results['d_loss'] / running_results['batch_sizes'],
             running_results['g_loss'] / running_results['batch_sizes'],
             running_results['d_score'] / running_results['batch_sizes'],
@@ -137,10 +137,6 @@ def main():
         batch_mse = ((fake_img - real_img) ** 2).data.mean()
         batch_ssim = ssim(fake_img, real_img).item()
         batch_psnr = 10 * log10(1 /batch_mse)
-        
-        results['psnr'].append(psnr_epoch)
-        results['ssim'].append(ssim_epoch)
-        results['avg_loss'].append(avg_loss_batch)
         
         # Save loss\scores\psnr\ssim
         results['d_loss'].append(running_results['d_loss'] / running_results['batch_sizes'])

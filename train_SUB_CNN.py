@@ -49,7 +49,7 @@ def main():
     criterion = nn.MSELoss()
 
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=25, gamma=0.1)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.2)
 
     out_path = 'results/'
     out_model_path = 'models/'

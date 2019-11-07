@@ -13,7 +13,6 @@ import torch.optim as optim
 from torch.utils.data import DataLoader
 from super_resolution_data_loader_resize import *
 from pytorch_ssim import *
-    begin_counter = time.time()
 
 from VDSR_model import Net
 
@@ -69,7 +68,7 @@ def main():
     results = {'avg_loss': [], 'psnr': [], 'ssim': []}
     
     # Training
-
+    
     begin_counter = time.time()
 
     for epoch in range(1, epochs + 1):
@@ -77,7 +76,6 @@ def main():
         model.train()
         for iteration, batch in enumerate(training_data_loader, 1):
             input_, target = batch[0].to(device), batch[1].to(device)
-            
             optimizer.zero_grad()
             upsampled_img = model(input_)
             loss = criterion(upsampled_img, target)
