@@ -34,8 +34,9 @@ def main():
 
     batch_size = 10
     epochs = 100
-    lr = 0.01
+    lr = 0.1
     threads = 4
+    step_size = 10
     clip = 0.4
     upscale_factor = args.upscale_factor
 
@@ -52,9 +53,9 @@ def main():
     criterion = nn.MSELoss(reduction='sum')
 
     #optimizer = optim.Adam(model.parameters(), lr=lr)
-    #optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=1e-4)
-    optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=1e-4)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=1e-4)
+    #optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=1e-4)
+    #scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
 
     out_path = 'results/'
     out_model_path = 'models/'
@@ -73,6 +74,11 @@ def main():
 
     for epoch in range(1, epochs + 1):
         epoch_loss = 0
+        
+        # Sets the learning rate to the initial LR decayed by 10 every 10 epochs
+        updated_lr = lr * (0.1 ** ((epoch-1) // step_size))
+        optimizer.param_groups[0]['lr'] = updated_lr
+        
         model.train()
         for iteration, batch in enumerate(training_data_loader, 1):
             input_, target = batch[0].to(device), batch[1].to(device)
@@ -86,7 +92,7 @@ def main():
 
             print("===> Epoch[{}]({}/{}): Loss: {:.4f}".format(epoch, iteration, len(training_data_loader), loss.item()))
         
-        scheduler.step() # Decrease learning rate after 10 epochs to 10% of its value
+        #scheduler.step() # Decrease learning rate after 10 epochs to 10% of its value
         
         psnr_epoch = 10*log10(1/(epoch_loss / len(training_data_loader)))
         ssim_epoch = ssim(upsampled_img, target).item()
