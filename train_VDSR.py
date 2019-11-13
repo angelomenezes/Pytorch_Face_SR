@@ -4,6 +4,8 @@ import numpy as np
 
 import pandas as pd
 import os
+import argparse
+import time
 
 import torch
 import torch.nn as nn
@@ -32,7 +34,7 @@ def main():
 
     batch_size = 10
     epochs = 50
-    lr = 0.1
+    lr = 0.001
     threads = 4
     step_size = 10
     clip = 0.4
@@ -51,8 +53,8 @@ def main():
     criterion = nn.MSELoss(reduction='sum')
 
     #optimizer = optim.Adam(model.parameters(), lr=lr)
-    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=1e-4)
-    #optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=1e-4)
+    #optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=1e-4)
+    optimizer = optim.Adam(model.parameters(), lr=lr, momentum=0.9, weight_decay=1e-4)
     #scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
 
     out_path = 'results/'

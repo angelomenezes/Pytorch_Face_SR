@@ -1,6 +1,8 @@
 from math import log10
 import matplotlib.pyplot as plt
 import numpy as np
+import argparse
+import time
 
 import pandas as pd
 import os
@@ -48,7 +50,7 @@ def main():
     criterion = nn.MSELoss()
 
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.2)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.2)
 
     out_path = 'results/'
     out_model_path = 'models/'
@@ -80,7 +82,7 @@ def main():
 
             #print("===> Epoch[{}]({}/{}): Loss: {:.4f}".format(epoch, iteration, len(training_data_loader), loss.item()))
         
-        scheduler.step() # Decrease learning rate after 20 epochs to 20% of its value
+        scheduler.step() # Decrease learning rate after 15 epochs to 20% of its value
         
         psnr_epoch = 10*log10(1/(epoch_loss / len(training_data_loader)))
         ssim_epoch = ssim(upsampled_img, target).item()

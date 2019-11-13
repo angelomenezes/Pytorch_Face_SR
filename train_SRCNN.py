@@ -4,6 +4,8 @@ import numpy as np
 
 import pandas as pd
 import os
+import argparse
+import time
 
 import torch
 import torch.nn as nn
@@ -48,7 +50,7 @@ def main():
     criterion = nn.MSELoss()
 
     optimizer = optim.Adam(model.parameters(), lr=lr)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=20, gamma=0.2)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=15, gamma=0.2)
 
     out_path = 'results/'
     out_model_path = 'models/'
