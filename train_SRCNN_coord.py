@@ -12,12 +12,12 @@ from torch.utils.data import DataLoader
 from dataset.data_loader_YCbCr_resize import *
 from utils.pytorch_ssim import *
 
-from SRCNN_model import Net
+from SRCNN_coord_model import Net
 
 torch.manual_seed(1)
 device = torch.device("cuda")
 
-parser = argparse.ArgumentParser(description='PyTorch SRCNN')
+parser = argparse.ArgumentParser(description='PyTorch SRCNN with CoordConv')
 
 # hyper-parameters
 parser.add_argument('--inputDir', type=str, help='where the low-res data belong')
@@ -80,7 +80,7 @@ def main():
 
             #print("===> Epoch[{}]({}/{}): Loss: {:.4f}".format(epoch, iteration, len(training_data_loader), loss.item()))
         
-        scheduler.step() # Decrease learning rate after 25 epochs to 10% of its value
+        scheduler.step() # Decrease learning rate after 20 epochs to 20% of its value
         
         psnr_epoch = 10*log10(1/(epoch_loss / len(training_data_loader)))
         ssim_epoch = ssim(upsampled_img, target).item()
@@ -101,16 +101,16 @@ def main():
                     data={'Avg. Loss': results['avg_loss'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},
                     index=range(1, epoch + 1))
 
-            data_frame.to_csv(out_path + 'SRCNN_x' + str(upscale_factor) + '_train_results.csv', index_label='Epoch')
+            data_frame.to_csv(out_path + 'SRCNN_coord_x' + str(upscale_factor) + '_train_results.csv', index_label='Epoch')
             
-            path = out_model_path + "SRCNN_x{}_epoch_{}.pth".format(upscale_factor, epoch)
+            path = out_model_path + "SRCNN_coord_x{}_epoch_{}.pth".format(upscale_factor, epoch)
             torch.save(model, path)
             print("Checkpoint saved to {}".format(path))
     
     end_counter = time.time()
     training_time = end_counter - begin_counter
     print("Seconds spent during training = ", training_time)
-    report = open(out_path + "SRCNN_model_x" + str(args.upscale_factor) + ".txt", "w")
+    report = open(out_path + "SRCNN_coord_model_x" + str(args.upscale_factor) + ".txt", "w")
     report.write("Training time: {:.2f}".format(training_time))
     report.close()
 

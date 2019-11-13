@@ -9,15 +9,14 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from dataset.data_loader_YCbCr_resize import *
+from dataset.data_loader_YCbCr import *
+from SUB_CNN_coord_model import Net
 from utils.pytorch_ssim import *
-
-from SRCNN_model import Net
 
 torch.manual_seed(1)
 device = torch.device("cuda")
 
-parser = argparse.ArgumentParser(description='PyTorch SRCNN')
+parser = argparse.ArgumentParser(description='PyTorch SubPixelCNN with CoordConv')
 
 # hyper-parameters
 parser.add_argument('--inputDir', type=str, help='where the low-res data belong')
@@ -28,9 +27,9 @@ args = parser.parse_args()
 
 def main():
     
-    # SRCNN parameters
+    # SubPixelCNN with CoordConv parameters
 
-    batch_size = 64
+    batch_size = 32
     epochs = 50
     lr = 0.01
     threads = 4
@@ -44,7 +43,7 @@ def main():
     training_data_loader = DataLoader(dataset=train_set, num_workers=threads, 
                                       batch_size=batch_size, shuffle=True)
 
-    model = Net().to(device)
+    model = Net(upscale_factor=upscale_factor).to(device)
     criterion = nn.MSELoss()
 
     optimizer = optim.Adam(model.parameters(), lr=lr)
@@ -62,7 +61,7 @@ def main():
     results = {'avg_loss': [], 'psnr': [], 'ssim': []}
     
     # Training
-    
+
     begin_counter = time.time()
 
     for epoch in range(1, epochs + 1):
@@ -80,7 +79,7 @@ def main():
 
             #print("===> Epoch[{}]({}/{}): Loss: {:.4f}".format(epoch, iteration, len(training_data_loader), loss.item()))
         
-        scheduler.step() # Decrease learning rate after 25 epochs to 10% of its value
+        scheduler.step() # Decrease learning rate after 20 epochs to 20% of its value
         
         psnr_epoch = 10*log10(1/(epoch_loss / len(training_data_loader)))
         ssim_epoch = ssim(upsampled_img, target).item()
@@ -101,19 +100,17 @@ def main():
                     data={'Avg. Loss': results['avg_loss'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},
                     index=range(1, epoch + 1))
 
-            data_frame.to_csv(out_path + 'SRCNN_x' + str(upscale_factor) + '_train_results.csv', index_label='Epoch')
-            
-            path = out_model_path + "SRCNN_x{}_epoch_{}.pth".format(upscale_factor, epoch)
+            data_frame.to_csv(out_path + 'SubCNN_coord_dx' + str(upscale_factor) + '_train_results.csv', index_label='Epoch')
+            path = out_model_path + "SubCNN_coord_x{}_epoch_{}.pth".format(upscale_factor, epoch)
             torch.save(model, path)
             print("Checkpoint saved to {}".format(path))
-    
+
     end_counter = time.time()
     training_time = end_counter - begin_counter
     print("Seconds spent during training = ", training_time)
-    report = open(out_path + "SRCNN_model_x" + str(args.upscale_factor) + ".txt", "w")
+    report = open(out_path + "SubCNN_coord_model_x" + str(args.upscale_factor) + ".txt", "w")
     report.write("Training time: {:.2f}".format(training_time))
     report.close()
-
 
 if __name__ == "__main__":
     main()

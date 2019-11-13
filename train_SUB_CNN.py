@@ -1,8 +1,6 @@
 from math import log10
 import matplotlib.pyplot as plt
 import numpy as np
-import argparse
-import time
 
 import pandas as pd
 import os
@@ -11,9 +9,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from super_resolution_data_loader import *
+from dataset.data_loader_YCbCr import *
 from SUB_CNN_model import Net
-from pytorch_ssim import *
+from utils.pytorch_ssim import *
 
 torch.manual_seed(1)
 device = torch.device("cuda")
@@ -32,7 +30,7 @@ def main():
     # SubPixelCNN parameters
 
     batch_size = 32
-    epochs = 100
+    epochs = 50
     lr = 0.01
     threads = 4
     upscale_factor = args.upscale_factor
@@ -81,7 +79,7 @@ def main():
 
             #print("===> Epoch[{}]({}/{}): Loss: {:.4f}".format(epoch, iteration, len(training_data_loader), loss.item()))
         
-        scheduler.step() # Decrease learning rate after 100 epochs to 10% of its value
+        scheduler.step() # Decrease learning rate after 20 epochs to 20% of its value
         
         psnr_epoch = 10*log10(1/(epoch_loss / len(training_data_loader)))
         ssim_epoch = ssim(upsampled_img, target).item()
@@ -96,7 +94,7 @@ def main():
                                                                                             psnr_epoch,
                                                                                             ssim_epoch))
         # Checkpoint
-        if epoch % (epochs // 10) == 0:
+        if epoch % (epochs // 2) == 0:
         
             data_frame = pd.DataFrame(
                     data={'Avg. Loss': results['avg_loss'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},

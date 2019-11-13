@@ -1,8 +1,6 @@
 from math import log10
 import matplotlib.pyplot as plt
 import numpy as np
-import argparse
-import time
 
 import pandas as pd
 import os
@@ -11,8 +9,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from super_resolution_data_loader_resize import *
-from pytorch_ssim import *
+from dataset.data_loader_YCbCr_resize import *
+from utils.pytorch_ssim import *
 
 from VDSR_model import Net
 
@@ -33,7 +31,7 @@ def main():
     # VDSR parameters
 
     batch_size = 10
-    epochs = 100
+    epochs = 50
     lr = 0.1
     threads = 4
     step_size = 10
