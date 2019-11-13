@@ -1,6 +1,5 @@
 # Data loader for Super-Resolution model 
 
-#import cv2
 from torch.utils.data import Dataset
 from torchvision.transforms import Compose, RandomCrop, ToTensor, ToPILImage, CenterCrop, Resize
 
@@ -13,7 +12,7 @@ import torchvision.transforms as transforms
 
 
 def load_image(path):
-    return Image.open(path)
+    return Image.open(path).convert('RGB')
     
 def totensor():
     return transforms.Compose([transforms.ToTensor(),])
