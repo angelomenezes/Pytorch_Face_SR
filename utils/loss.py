@@ -8,8 +8,8 @@ from numpy import dot
 from numpy.linalg import norm
 import os
 
-#model_path = '/home/angelo/Desktop/Github/Feature-Extractors/'
-model_path = '/home/jupyter/Feature-Extractors/'
+model_path = '/home/angelo/Desktop/Github/Feature-Extractors/'
+#model_path = '/home/jupyter/Feature-Extractors/'
 
 os.sys.path.append(model_path)
 
