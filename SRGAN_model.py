@@ -36,6 +36,10 @@ class Generator(nn.Module):
         block8 = self.block8(block1 + block7)
 
         return (torch.tanh(block8) + 1) / 2
+    
+    def weight_init(self, mean=0.0, std=0.02):
+        for m in self._modules:
+            normal_init(self._modules[m], mean, std)
 
 
 class Discriminator(nn.Module):
@@ -83,6 +87,10 @@ class Discriminator(nn.Module):
         batch_size = x.size(0)
         return torch.sigmoid(self.net(x).view(batch_size))
 
+    def weight_init(self, mean=0.0, std=0.02):
+        for m in self._modules:
+            normal_init(self._modules[m], mean, std)
+
 
 class ResidualBlock(nn.Module):
     def __init__(self, channels):
@@ -115,3 +123,8 @@ class UpsampleBLock(nn.Module):
         x = self.pixel_shuffle(x)
         x = self.prelu(x)
         return x
+
+def normal_init(m, mean, std):
+    if isinstance(m, nn.ConvTranspose2d) or isinstance(m, nn.Conv2d):
+        m.weight.data.normal_(mean, std)
+        m.bias.data.zero_()
