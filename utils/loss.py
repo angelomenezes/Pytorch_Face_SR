@@ -8,8 +8,8 @@ from numpy import dot
 from numpy.linalg import norm
 import os
 
-model_path = '/home/angelo/Desktop/Github/Feature-Extractors/'
-#model_path = '/home/jupyter/Feature-Extractors/'
+#model_path = '/home/angelo/Desktop/Github/Feature-Extractors/'
+model_path = '/home/jupyter/Feature-Extractors/'
 
 os.sys.path.append(model_path)
 
@@ -115,7 +115,7 @@ class FacePerceptionLoss(nn.Module):
         # Image Loss
         image_loss = self.mse_loss(out_images, target_images)
         
-        return image_loss + 0.1 * identity_loss + 0.1 * content_loss
+        return image_loss + 0.01 * identity_loss + 0.01 * content_loss
 
 class GeneratorLoss(nn.Module):
     def __init__(self):
