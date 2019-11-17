@@ -43,7 +43,7 @@ class Generator(nn.Module):
         block7 = self.block7(block6)
         block8 = self.block8(block1 + block7)
 
-        return (nn.functional.tanh(block8) + 1) / 2
+        return (torch.tanh(block8) + 1) / 2
 
 
 class Discriminator(nn.Module):
@@ -89,7 +89,7 @@ class Discriminator(nn.Module):
 
     def forward(self, x):
         batch_size = x.size(0)
-        return nn.functional.sigmoid(self.net(x).view(batch_size))
+        return torch.sigmoid(self.net(x).view(batch_size))
 
 
 class ResidualBlock(nn.Module):
