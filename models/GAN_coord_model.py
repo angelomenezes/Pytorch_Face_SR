@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from base_networks import *
+from models.base_networks import *
 import skimage as sk
 import math
 
