@@ -9,27 +9,27 @@ class Net(nn.Module):
         
         self.layers = torch.nn.Sequential(
             nn.Conv2d(3, 56, 5, padding=2), # 72
-            nn.InstanceNorm2d(56),
+            #nn.InstanceNorm2d(56),
             nn.PReLU(),
             nn.Conv2d(56, 12, 1),
-            nn.InstanceNorm2d(12),
+            #nn.InstanceNorm2d(12),
             nn.PReLU(),
             nn.Conv2d(12, 12, 3, padding=1),
-            nn.InstanceNorm2d(12),
+            #nn.InstanceNorm2d(12),
             nn.PReLU(),
             nn.Conv2d(12, 12, 3, padding=1),
-            nn.InstanceNorm2d(12),
+            #nn.InstanceNorm2d(12),
             nn.PReLU(),
             nn.Conv2d(12, 12, 3, padding=1),
-            nn.InstanceNorm2d(12),
+            #nn.InstanceNorm2d(12),
             nn.PReLU(),
             nn.Conv2d(12, 12, 3, padding=1),
-            nn.InstanceNorm2d(12),
+            #nn.InstanceNorm2d(12),
             nn.PReLU(),
             nn.Conv2d(12, 56, 1), # 72
             #nn.InstanceNorm2d(56),
             nn.PReLU(),
-            nn.ConvTranspose2d(56, 3, 9, stride=2, output_padding=1, padding =4) #  (72-1) * 2 + 9 - 8 + 1 = 144 
+            nn.ConvTranspose2d(56, 3, 9, stride=4, output_padding=1, padding =3) #  (72-1) * 2 + 9 - 8 + 1 = 144 
             # stride = 2   padding=4  for x2 upsamling
             # stride = 4   padding=3  for x4 upsampling
         )
