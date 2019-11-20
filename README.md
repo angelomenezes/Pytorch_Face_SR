@@ -1,4 +1,4 @@
-# Pytorch_Face_SR
+# Effects of deep learning based super-resolution algorithms for low-resolution face recognition
 
 Super resolution algorithms implemented in Pytorch for performance evaluation of face verification tasks in low-resolution scenarios.
 
