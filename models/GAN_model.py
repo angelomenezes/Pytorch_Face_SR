@@ -45,6 +45,10 @@ class Generator(nn.Module):
 
         return (torch.tanh(block8) + 1) / 2
 
+    def weight_init(self, mean=0.0, std=0.02):
+        for m in self._modules:
+            normal_init(self._modules[m], mean, std)
+
 
 class Discriminator(nn.Module):
     def __init__(self):
@@ -91,6 +95,10 @@ class Discriminator(nn.Module):
         batch_size = x.size(0)
         return torch.sigmoid(self.net(x).view(batch_size))
 
+    def weight_init(self, mean=0.0, std=0.02):
+        for m in self._modules:
+            normal_init(self._modules[m], mean, std)
+
 
 class ResidualBlock(nn.Module):
     def __init__(self, channels):
@@ -109,6 +117,7 @@ class ResidualBlock(nn.Module):
         residual = self.bn2(residual)
 
         return x + residual
+
 
 
 class UpsampleBLock(nn.Module):
@@ -139,6 +148,10 @@ def ssim(outputs, labels) :
         ssim += compare_ssim(labels[i],outputs[i], win_size=3, multichannel=True)
     return ssim / N
     
+def normal_init(m, mean, std):
+    if isinstance(m, nn.ConvTranspose2d) or isinstance(m, nn.Conv2d):
+        m.weight.data.normal_(mean, std)
+        m.bias.data.zero_()
 
 # maintain all metrics required in this dictionary- these are used in the training and evaluation loops
 metrics = {
