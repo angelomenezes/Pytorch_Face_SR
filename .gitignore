@@ -105,3 +105,12 @@ venv.bak/
 
 # Alignment Weights
 *.dat
+
+# Images
+*.pdf
+*.png
+*.jpg
+*.jpeg
+
+# Folder results
+results/
