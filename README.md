@@ -1,6 +1,6 @@
 # Pytorch Face Super-Resolution Algorithms
 
-This repository contains the results of some standard and proposed super-resolution algorithms for improving performance in two low-resolution face recognition tasks. The full discussion of the results was presented in my master thesis ["Analysis and evaluation of Deep Learning based Super-Resolution algorithms to improve performance in Low-Resolution Face Recognition"](https://arxiv.org/abs/2101.10845) in 2019. 
+This repository contains the results of some standard and proposed super-resolution algorithms for improving performance in two low-resolution face recognition tasks. The full discussion of the results was presented in my master thesis ["Analysis and evaluation of Deep Learning based Super-Resolution algorithms to improve performance in Low-Resolution Face Recognition"](https://arxiv.org/abs/2101.10845) in 2019 (published on arXiv in 2021). 
 
 ### Citation
 
